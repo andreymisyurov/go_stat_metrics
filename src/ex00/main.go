@@ -96,8 +96,8 @@ func main() {
 	flag.Parse();
 
 	arr := input_num();
-	sum := get_sum(arr);
-	mean := get_mean(sum, len(arr));
+
+	mean := get_mean(get_sum(arr), len(arr));
 	median := get_median(arr);
 	mode := get_mode(arr);
 	sd := get_sd(arr);
@@ -122,14 +122,4 @@ func main() {
 	if *sd_fl {
 		fmt.Printf("SD: %.2f\n", sd);
 	}
-
 }
-
-
-
-
-
-
-
-
-
