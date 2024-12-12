@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"bufio"
 	"fmt"
 	"os"
@@ -15,8 +16,12 @@ func input_num() []float64 {
 	sc.Scan();
 	txt := sc.Text();
 	var parts []string = strings.Fields(txt);
-	var nums []float64;
+	if len(parts) == 0 {
+		fmt.Fprintln(os.Stderr, "err: empty input\n");
+		os.Exit(1);
+	}
 
+	var nums []float64;
 	for i := 0; i < len(parts); i++ {
 		var num, err = strconv.ParseFloat(parts[i], 64);
 		if err != nil {
@@ -82,11 +87,42 @@ func get_sd(nums []float64) float64 {
 }
 
 func main() {
-	var arr []float64 = input_num();
-	fmt.Printf("Mean: %.2f\n", get_mean(get_sum(arr), len(arr)));
-	fmt.Printf("Median: %.2f\n", get_median(arr));
-	fmt.Printf("Mode: %.2f\n", get_mode(arr));
-	fmt.Printf("SD: %.2f\n", get_sd(arr));
+
+	mean_fl := flag.Bool("mean", false, "print mean");
+	median_fl := flag.Bool("median", false, "print median");
+	mode_fl := flag.Bool("mode", false, "print mode");
+	sd_fl := flag.Bool("sd", false, "print standard deviation");
+
+	flag.Parse();
+
+	arr := input_num();
+	sum := get_sum(arr);
+	mean := get_mean(sum, len(arr));
+	median := get_median(arr);
+	mode := get_mode(arr);
+	sd := get_sd(arr);
+
+	if !*mean_fl && !*median_fl && !*mode_fl && !*sd_fl {
+		fmt.Printf("Mean: %.2f\n", mean);
+		fmt.Printf("Median: %.2f\n", median);
+		fmt.Printf("Mode: %.2f\n", mode);
+		fmt.Printf("SD: %.2f\n", sd);
+		os.Exit(0);
+	}
+
+	if *mean_fl {
+		fmt.Printf("Mean: %.2f\n", mean);
+	}
+	if *median_fl {
+		fmt.Printf("Median: %.2f\n", median);
+	}
+	if *mode_fl {
+		fmt.Printf("Mode: %.2f\n", mode);
+	}
+	if *sd_fl {
+		fmt.Printf("SD: %.2f\n", sd);
+	}
+
 }
 
 
